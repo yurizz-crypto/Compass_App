@@ -78,33 +78,60 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (success) {
             SensorManager.getOrientation(rotationMatrix, orientationAngles);
 
+            float azimuth = (float) Math.toDegrees(orientationAngles[0]);
 
-            float degrees = (float) Math.toDegrees(orientationAngles[0]);
-
-            if (degrees < 0) {
-                degrees += 360;
+            if (azimuth < 0) {
+                azimuth += 360;
             }
-            int degreesInt = Math.round(degrees);
 
-            tv_degrees.setText(degreesInt + "\u00B0");
+            int displayAngle;
+            String label;
+
+            if (Math.abs(azimuth - 0) < 0.5 || Math.abs(azimuth - 360) < 0.5) {
+                displayAngle = 0;
+                label = "N";
+            } else if (Math.abs(azimuth - 90) < 0.5) {
+                displayAngle = 90;
+                label = "E";
+            } else if (Math.abs(azimuth - 180) < 0.5) {
+                displayAngle = 0;
+                label = "S";
+            } else if (Math.abs(azimuth - 270) < 0.5) {
+                displayAngle = 90;
+                label = "W";
+            }
+            else if (azimuth > 0 && azimuth < 90) {
+                displayAngle = Math.round(azimuth);
+                label = "NE";
+            } else if (azimuth > 90 && azimuth < 180) {
+                displayAngle = Math.round(180 - azimuth);
+                label = "SE";
+            } else if (azimuth > 180 && azimuth < 270) {
+                displayAngle = Math.round(azimuth - 180);
+                label = "SW";
+            } else if (azimuth > 270 && azimuth < 360) {
+                displayAngle = Math.round(360 - azimuth);
+                label = "NW";
+            } else {
+                displayAngle = 0;
+                label = "N";
+            }
+
+            tv_degrees.setText(displayAngle + "° " + label);
 
             RotateAnimation rotate = new RotateAnimation(
                     current_degree,
-                    -degrees,
+                    -azimuth,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
-
-            rotate.setDuration(250);
+            rotate.setDuration(200);
             rotate.setFillAfter(true);
-
             iv_compass.startAnimation(rotate);
-            current_degree = -degrees;
+            current_degree = -azimuth;
         }
     }
 
-
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 }
