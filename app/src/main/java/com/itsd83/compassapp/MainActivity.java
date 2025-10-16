@@ -106,6 +106,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // You can handle changes in sensor accuracy here if needed, but it's not required for this app.
     }
 }
