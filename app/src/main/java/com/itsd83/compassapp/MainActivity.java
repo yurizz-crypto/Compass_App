@@ -5,7 +5,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -91,13 +94,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 display_angle = 0;
                 label = "N";
             } else if (Math.abs(azimuth - 90) < tolerance) {
-                display_angle = 89;
+                display_angle = 0;
                 label = "E";
             } else if (Math.abs(azimuth - 180) < tolerance) {
                 display_angle = 0;
                 label = "S";
             } else if (Math.abs(azimuth - 270) < tolerance) {
-                display_angle = 89;
+                display_angle = 0;
                 label = "W";
             }
 
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
             rotate.setDuration(200);
+            rotate.setInterpolator(new AccelerateInterpolator());
             rotate.setFillAfter(true);
             iv_compass.startAnimation(rotate);
             current_degree = -azimuth;
